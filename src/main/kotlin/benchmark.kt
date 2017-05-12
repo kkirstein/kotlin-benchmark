@@ -6,10 +6,9 @@
 package benchmark
 
 import kotlinx.coroutines.experimental.*
-import benchmark.timeit.timeIt
-import benchmark.experimental.timeit.timeIt as timeItAsync
+//import benchmark.timeit.timeIt
+import benchmark.experimental.timeit.timeItAsync
 import benchmark.fibonacci.*
-import benchmark.experimental.fibonacci.fibNaive as fibNaiveAsync
 import benchmark.perfectnumber.*
 
 // main entry point
@@ -19,36 +18,33 @@ fun main(args: Array<String>) = runBlocking {
     println("=================")
     println()
 
-    var jobs: MutableList<Job> = mutableListOf()
-
     // Fibonacci numbers
     // -----------------
-    jobs.add(launch(CommonPool) {
-        val res = timeItAsync { fibNaiveAsync(35) }
-        println("fibNaive(35) = ${res.result}, elapsed time: ${res.elapsed} ms.")
-    })
-    jobs.add(launch(CommonPool) {
-        val res = timeItAsync { fib(35) }
-        println("fib(35) = ${res.result}, elapsed time: ${res.elapsed} ms.")
-    })
-    jobs.add(launch(CommonPool) {
-        val res = timeItAsync { fib(1000) }
-        println("fib(1000) = ${res.result}, elapsed time: ${res.elapsed} ms.")
-    })
+    val resFibNaive = timeItAsync { fibNaive(35) }
+    val resFib = timeItAsync { fib(35) }
+    val resFib2 = timeItAsync { fib(1000) }
 
     // Perfect numbers
     // ---------------
-    jobs.add(launch(CommonPool) {
-        val res = timeItAsync { perfectNumbers(10000) }
-        println("perfectNumbers(10000) = ${res.result}, elapsed time: ${res.elapsed} ms.")
-    })
-    jobs.add(launch(CommonPool) {
-        val res = timeItAsync { perfectNumberSeq.take(5).toList() }
-        println("perfectNumberSeq(5) = ${res.result}, elapsed time: ${res.elapsed} ms.")
-    })
+    val resPn = timeItAsync { perfectNumbers(10000) }
+    val resPnSeq = timeItAsync { perfectNumberSeq.take(5).toList() }
 
-    //println("------------------")
-    jobs.map { it.join() }
+    // Output results
+    println("Fibonacci numbers")
+    println("-----------------")
+    println("fibNaive(35) = ${resFibNaive.await().result}, elapsed time: ${resFibNaive.await().elapsed} ms.")
+    println("fib(35) = ${resFib.await().result}, elapsed time: ${resFib.await().elapsed} ms.")
+    println("fib(1000) = ${resFib2.await().result}, elapsed time: ${resFib2.await().elapsed} ms.")
+
+    println()
+
+    println("Perfect numbers")
+    println("---------------")
+    println("perfectNumbers(10000) = ${resPn.await().result}, elapsed time: ${resPn.await().elapsed} ms.")
+    println("perfectNumberSeq(5) = ${resPnSeq.await().result}, elapsed time: ${resPnSeq.await().elapsed} ms.")
+
+    println()
+
+    println("------------------")
     println("Done.")
-
 }
