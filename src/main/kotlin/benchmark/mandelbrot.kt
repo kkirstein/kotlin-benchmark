@@ -6,7 +6,6 @@
 package benchmark.mandelbrot
 
 import java.awt.image.BufferedImage
-import java.nio.Buffer
 
 import complex.Complex
 
@@ -15,18 +14,29 @@ data class Image<T>(val width: Int, val height: Int, val channels: Int,
                     val data: Array<T>)
 
 // calculates pixel values
-fun pixelVal(z0: Complex, nIter: Int = 255, zMax: Double = 2.0): Int {
+fun pixelVal(z0: Complex, maxIter: Int = 255, zMax: Double = 2.0): Int {
     var iter = 0
     var z = Complex.zero
 
-    while (iter <= nIter) {
+    while (iter <= maxIter) {
         if (z.abs() > zMax) return iter
         z = z * z + z0
         iter++
     }
 
-    return nIter
+    return maxIter
 }
+
+// convert pixel value to RGB
+fun toRGB(value: Int) =
+    if (value == 0) {
+        0
+    } else {
+        val r = 5 * (value % 15)
+        val g = 32 * (value % 7)
+        val b = 8 *(value % 31)
+        (r.shl(16) + g.shl(8) + b)
+    }
 
 // generates Mandelbrot set for given coordinates
 fun mandelbrot(width: Int, height: Int,
@@ -35,6 +45,15 @@ fun mandelbrot(width: Int, height: Int,
 
     val img = BufferedImage(width, height, BufferedImage.TYPE_INT_RGB)
 
+    for (y in 0.rangeTo(height)) {
+        for (x in 0.rangeTo(width)) {
+            val xCoord = (x.toDouble() - xCenter) * pixSize
+            val yCoord = (y.toDouble() - yCenter) * pixSize
+            val pixVal = pixelVal(Complex(re = xCoord, im = yCoord))
+
+            img.setRGB(x, y, pixVal)
+        }
+    }
     return img
 }
 
