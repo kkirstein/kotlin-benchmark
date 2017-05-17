@@ -35,7 +35,7 @@ fun toRGB(value: Int) =
         val r = 5 * (value % 15)
         val g = 32 * (value % 7)
         val b = 8 *(value % 31)
-        (r.shl(16) + g.shl(8) + b)
+        (r.shl(16) or g.shl(8) or b)
     }
 
 // generates Mandelbrot set for given coordinates
