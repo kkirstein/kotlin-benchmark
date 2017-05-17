@@ -9,7 +9,10 @@ import kotlinx.coroutines.experimental.*
 //import benchmark.timeit.timeIt
 import benchmark.experimental.timeit.timeItAsync
 import benchmark.fibonacci.*
+import benchmark.mandelbrot.mandelbrot
 import benchmark.perfectnumber.*
+import java.io.File
+import javax.imageio.ImageIO
 
 // main entry point
 fun main(args: Array<String>) = runBlocking {
@@ -44,6 +47,12 @@ fun main(args: Array<String>) = runBlocking {
     println("perfectNumberSeq(5) = ${resPnSeq.await().result}, elapsed time: ${resPnSeq.await().elapsed} ms.")
 
     println()
+
+    println("Mandelbrot set")
+    println("--------------")
+    val ms = mandelbrot(800, 600, -0.0, -0.65)
+    val mandelbrotFile = File("./mandelbrot.png")
+    ImageIO.write(ms, "png", mandelbrotFile)
 
     println("------------------")
     println("Done.")

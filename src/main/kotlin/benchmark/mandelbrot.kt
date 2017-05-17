@@ -45,10 +45,10 @@ fun mandelbrot(width: Int, height: Int,
 
     val img = BufferedImage(width, height, BufferedImage.TYPE_INT_RGB)
 
-    for (y in 0.rangeTo(height)) {
-        for (x in 0.rangeTo(width)) {
-            val xCoord = (x.toDouble() - xCenter) * pixSize
-            val yCoord = (y.toDouble() - yCenter) * pixSize
+    for (y in 0.rangeTo(height-1)) {
+        for (x in 0.rangeTo(width-1)) {
+            val xCoord = xCenter - 0.5 * x.toDouble() * pixSize
+            val yCoord = yCenter + 0.5 * y.toDouble() * pixSize
             val pixVal = pixelVal(Complex(re = xCoord, im = yCoord))
 
             img.setRGB(x, y, pixVal)
