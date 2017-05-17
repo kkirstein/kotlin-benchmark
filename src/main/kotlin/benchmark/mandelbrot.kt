@@ -49,7 +49,7 @@ fun mandelbrot(width: Int, height: Int,
         for (x in 0.rangeTo(width-1)) {
             val xCoord = xCenter - 0.5 * x.toDouble() * pixSize
             val yCoord = yCenter + 0.5 * y.toDouble() * pixSize
-            val pixVal = pixelVal(Complex(re = xCoord, im = yCoord))
+            val pixVal = toRGB(pixelVal(Complex(re = xCoord, im = yCoord)))
 
             img.setRGB(x, y, pixVal)
         }
