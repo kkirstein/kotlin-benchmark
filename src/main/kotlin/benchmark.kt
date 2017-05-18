@@ -32,6 +32,10 @@ fun main(args: Array<String>) = runBlocking {
     val resPn = timeItAsync { perfectNumbers(10000) }
     val resPnSeq = timeItAsync { perfectNumberSeq.take(5).toList() }
 
+    // Mandelbrot set
+    // --------------
+    val resMandel = timeItAsync { mandelbrot(800, 600, -0.0, -0.65) }
+
     // Output results
     println("Fibonacci numbers")
     println("-----------------")
@@ -50,9 +54,9 @@ fun main(args: Array<String>) = runBlocking {
 
     println("Mandelbrot set")
     println("--------------")
-    val ms = mandelbrot(800, 600, -0.0, -0.65)
+    println("mandelbrot(800, 600, ..) = Done, elapsed time: ${resMandel.await().elapsed} ms.")
     val mandelbrotFile = File("./mandelbrot.png")
-    ImageIO.write(ms, "png", mandelbrotFile)
+    ImageIO.write(resMandel.await().result, "png", mandelbrotFile)
 
     println("------------------")
     println("Done.")
