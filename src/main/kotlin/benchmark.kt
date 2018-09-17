@@ -8,6 +8,7 @@ package benchmark
 import kotlinx.coroutines.experimental.*
 //import benchmark.timeit.timeIt
 import benchmark.experimental.timeit.timeItAsync
+import benchmark.experimental.timeit.timeItAsync2
 import benchmark.fibonacci.*
 import benchmark.mandelbrot.mandelbrot
 import benchmark.perfectnumber.*
@@ -34,7 +35,7 @@ fun main(args: Array<String>) = runBlocking {
 
     // Mandelbrot set
     // --------------
-    val resMandel = timeItAsync { mandelbrot(800, 600, -0.0, -0.65) }
+    val resMandel = timeItAsync2 { mandelbrot(800, 600, -0.0, -0.65) }
 
     // Output results
     println("Fibonacci numbers")

@@ -6,10 +6,10 @@
 package benchmark.experimental.timeit
 
 import kotlinx.coroutines.experimental.*
-//import kotlin.coroutines.experimental.*
 
 import benchmark.timeit.timeIt
 import benchmark.timeit.Result
+import benchmark.timeit.timeIt2
 
 // container for timing and function result
 data class Result<T>(val result: T, val elapsed: Long)
@@ -27,3 +27,8 @@ data class Result<T>(val result: T, val elapsed: Long)
 fun <T> timeItAsync(body: () -> T): Deferred<Result<T>> {
   return async(CommonPool) { timeIt(body) }
 }
+
+fun <T> timeItAsync2(body: suspend () -> T): Deferred<Result<T>> {
+  return async(CommonPool) { timeIt2(body) }
+}
+
